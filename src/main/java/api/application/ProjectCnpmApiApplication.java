@@ -45,7 +45,7 @@ public class ProjectCnpmApiApplication implements CommandLineRunner {
 
 //			get(session);
 			
-			delete(session);
+//			delete(session);
 
 			session.getTransaction().commit();
 		} catch (HibernateException e) {
@@ -76,11 +76,11 @@ public class ProjectCnpmApiApplication implements CommandLineRunner {
 		WishList wishList = new WishList("WLIST01", "WishList for user 1", products);
 		Customer customer = new Customer("USER01", "nghia", "nghia1k45@gmail.com", "0868880758", "Tay Ninh", account,
 				true, new Date(), cart, wishList);
-//		session.save(account);
+		session.save(account);
 		session.save(cart);
 		session.save(wishList);
 		session.save(customer);
-//		session.save(role_admin);
+		session.save(role_admin);
 //		session.update(account);
 //		session.update(customer);
 	}
