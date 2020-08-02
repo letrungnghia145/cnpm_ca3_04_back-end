@@ -2,6 +2,7 @@ package api.application.entity;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -25,7 +26,7 @@ public class WishList {
 	@Id
 	private String wlist_id;
 	private String description;
-	@ManyToMany
+	@ManyToMany(cascade = CascadeType.REMOVE)
 	@JoinTable(name = "wlist_product", joinColumns = @JoinColumn(name = "wlist_id"), inverseJoinColumns = @JoinColumn(name = "product_id"))
 	private List<Product> products;
 }

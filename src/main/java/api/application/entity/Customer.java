@@ -3,6 +3,7 @@ package api.application.entity;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -24,9 +25,9 @@ public class Customer extends User {
 	private boolean gender;
 	@Temporal(TemporalType.DATE)
 	private Date dob;
-	@OneToOne
+	@OneToOne(cascade = CascadeType.REMOVE)
 	private Cart cart;
-	@OneToOne
+	@OneToOne(cascade = CascadeType.REMOVE)
 	private WishList wishList;
 	@OneToMany(mappedBy = "customer")
 	private List<Order> orders;

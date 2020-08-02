@@ -24,7 +24,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().antMatchers("/admin").hasRole("ADMIN").anyRequest().authenticated().and().formLogin();
+//		http.authorizeRequests().antMatchers("/admin").hasRole("ADMIN").anyRequest().authenticated().and().formLogin();
+		http.authorizeRequests().anyRequest().permitAll();
 	}
 
 	@Override

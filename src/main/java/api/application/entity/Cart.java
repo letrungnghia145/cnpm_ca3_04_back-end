@@ -2,6 +2,7 @@ package api.application.entity;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -21,7 +22,7 @@ public class Cart {
 	@Id
 	private String cart_id;
 	private String description;
-	@OneToMany(mappedBy = "cart")
+	@OneToMany(mappedBy = "cart", cascade = CascadeType.REMOVE, orphanRemoval = true)
 	private List<CartItem> items;
 
 	public Cart(String cart_id, String description) {

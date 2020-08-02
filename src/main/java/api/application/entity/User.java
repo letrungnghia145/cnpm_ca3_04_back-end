@@ -1,5 +1,6 @@
 package api.application.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToOne;
@@ -19,7 +20,7 @@ public abstract class User {
 	private String email;
 	private String phone;
 	private String address;
-	@OneToOne
+	@OneToOne(cascade = CascadeType.REMOVE)
 	private Account account;
 
 	public User(String user_id, String name, String email, String phone, String address, Account account) {
