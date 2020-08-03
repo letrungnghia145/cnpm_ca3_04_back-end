@@ -32,7 +32,7 @@ public class ProjectCnpmApiApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		useSessionFactory();
+//		useSessionFactory();
 
 	}
 
@@ -61,7 +61,6 @@ public class ProjectCnpmApiApplication implements CommandLineRunner {
 
 	private void get(Session session) {
 		Customer customer = session.get(Customer.class, "USER01");
-		System.out.println(customer.getAccount());
 		System.out.println(customer.getCart());
 		System.out.println(customer.getWishList());
 	}
@@ -77,11 +76,11 @@ public class ProjectCnpmApiApplication implements CommandLineRunner {
 		Customer customer = new Customer("USER01", "nghia", "nghia1k45@gmail.com", "0868880758", "Tay Ninh", account,
 				true, new Date(), cart, wishList);
 		session.save(account);
-		session.save(cart);
-		session.save(wishList);
-		session.save(customer);
-		session.save(role_admin);
-//		session.update(account);
+//		session.save(cart);
+//		session.save(wishList);
+//		session.save(customer);
+//		session.save(role_admin);
+		session.update(account);
 //		session.update(customer);
 	}
 }

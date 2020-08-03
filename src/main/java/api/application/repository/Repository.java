@@ -10,8 +10,9 @@ public interface Repository<T> {
 
 	public T update(T t);
 
-	public T delete(T t);
+	public T delete(String id);
 
+	// default method to use transaction
 	default T useTransaction(Session session, Functional<T> functional) {
 		T t = null;
 		try {

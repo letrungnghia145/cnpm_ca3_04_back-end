@@ -14,8 +14,11 @@ public class AccountRepository implements api.application.repository.Repository<
 
 	@Override
 	public Account create(Account t) {
-
-		return null;
+		Session session = sessionFactory.openSession();
+		return useTransaction(session, () -> {
+			session.save(t);
+			return t;
+		});
 	}
 
 	@Override
@@ -29,13 +32,22 @@ public class AccountRepository implements api.application.repository.Repository<
 
 	@Override
 	public Account update(Account t) {
-		// TODO Auto-generated method stub
-		return null;
+		Session session = sessionFactory.openSession();
+		return useTransaction(session, () -> {
+			Account account = session.get(Account.class, t.getAccount_id());
+			account = t;
+			session.update(account);
+			return account;
+		});
 	}
 
 	@Override
-	public Account delete(Account t) {
-		// TODO Auto-generated method stub
-		return null;
+	public Account delete(String id) {
+		Session session = sessionFactory.openSession();
+		return useTransaction(session, () -> {
+			Account account = session.get(Account.class, id);
+			session.delete(account);
+			return account;
+		});
 	}
 }
