@@ -4,7 +4,9 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
@@ -28,7 +30,7 @@ public class Product {
 	private String product_id;
 	private String name;
 	private BigDecimal price;
-	@OneToOne
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "product")
 	private ProductImages images;
 	@OneToOne
 	private Category type;
@@ -38,28 +40,58 @@ public class Product {
 	private String description;
 	private int stock;
 	private int evaluate;
-	@OneToOne
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "product")
 	private Promotion promotion;
-	@OneToMany(mappedBy = "product")
+	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Review> reviews;
 	@ManyToMany(mappedBy = "products")
 	private List<WishList> wishLists;
 	@ManyToMany(mappedBy = "products")
 	private List<Order> orders;
 
-	public Product(String product_id, String name, BigDecimal price, ProductImages images, Category type, Date mfg,
-			String exp, String description, int stock, int evaluate, Promotion promotion) {
+	public Product(String product_id, String name, BigDecimal price, Category type, Date mfg, String exp,
+			String description, int stock, int evaluate) {
 		super();
 		this.product_id = product_id;
 		this.name = name;
 		this.price = price;
-		this.images = images;
 		this.type = type;
 		this.mfg = mfg;
 		this.exp = exp;
 		this.description = description;
 		this.stock = stock;
 		this.evaluate = evaluate;
+	}
+
+	public void setProductImages(ProductImages images) {
+		if (images == null) {
+			if (this.images != null) {
+				this.images.setProduct(null);
+			}
+		} else {
+			images.setProduct(this);
+		}
+		this.images = images;
+	}
+
+	public void setPromotion(Promotion promotion) {
+		if (promotion == null) {
+			if (this.promotion != null) {
+				this.promotion.setProduct(null);
+			}
+		} else {
+			promotion.setProduct(this);
+		}
 		this.promotion = promotion;
+	}
+
+	public void addReview(Review review) {
+		reviews.add(review);
+		review.setProduct(this);
+	}
+
+	public void removeReview(Review review) {
+		reviews.remove(review);
+		review.setProduct(null);
 	}
 }

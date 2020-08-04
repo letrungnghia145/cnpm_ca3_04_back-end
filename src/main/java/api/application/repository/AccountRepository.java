@@ -1,5 +1,7 @@
 package api.application.repository;
 
+import javax.persistence.Query;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +50,15 @@ public class AccountRepository implements api.application.repository.Repository<
 			Account account = session.get(Account.class, id);
 			session.delete(account);
 			return account;
+		});
+	}
+
+	public Account findAccountByUsername(String username) {
+		Session session = sessionFactory.openSession();
+		return useTransaction(session, () -> {
+			Query query = session.createQuery("FROM Account WHERE username = :username");
+			query.setParameter("username", username);
+			return (Account) query.getSingleResult();
 		});
 	}
 }

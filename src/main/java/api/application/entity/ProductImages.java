@@ -1,10 +1,12 @@
 package api.application.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.MapsId;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,7 +15,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 
 @Table(name = "image")
 public class ProductImages {
@@ -24,4 +25,16 @@ public class ProductImages {
 	private String pic_2;
 	private String pic_3;
 	private String pic_4;
+	@OneToOne(fetch = FetchType.LAZY)
+	@MapsId
+	private Product product;
+
+	public ProductImages(String mainPic, String pic_1, String pic_2, String pic_3, String pic_4) {
+		super();
+		this.mainPic = mainPic;
+		this.pic_1 = pic_1;
+		this.pic_2 = pic_2;
+		this.pic_3 = pic_3;
+		this.pic_4 = pic_4;
+	}
 }

@@ -32,7 +32,7 @@ public class ProjectCnpmApiApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-//		useSessionFactory();
+		useSessionFactory();
 
 	}
 
@@ -41,13 +41,12 @@ public class ProjectCnpmApiApplication implements CommandLineRunner {
 		try {
 			session = sessionFactory.openSession();
 			session.beginTransaction();
-//			save(session);
 
-//			get(session);
-			
+//			save(session);
 //			delete(session);
 
 			session.getTransaction().commit();
+
 		} catch (HibernateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -56,31 +55,27 @@ public class ProjectCnpmApiApplication implements CommandLineRunner {
 	}
 
 	private void delete(Session session) {
-		session.delete(session.get(Customer.class, "USER01"));
-	}
-
-	private void get(Session session) {
-		Customer customer = session.get(Customer.class, "USER01");
-		System.out.println(customer.getCart());
-		System.out.println(customer.getWishList());
+		session.delete(new Role("ROLE01", "ROLE_ADMIN"));
+		Customer customer = session.get(Customer.class, "CUSTOMER01");
+		customer.setAccount(null);
+		customer.setCart(null);
+		session.delete(customer);
 	}
 
 	private void save(Session session) {
-		List<Role> roles = new ArrayList<>();
-		Role role_admin = new Role("ROLE01", "ADMIN");
-		roles.add(role_admin);
-		Account account = new Account("ACCOUNT01", "pyn_xd_2k@yahoo.com", "172285633", roles);
-		Cart cart = new Cart("CART01", "Cart for user 01");
+		Customer customer = new Customer("CUSTOMER01", "Le Trung Nghia", "nghia1k45@gmail.com", "0868880758",
+				"Tay Ninh", true, new Date());
+		Cart cart = new Cart("Cart for user 01");
 		List<Product> products = new ArrayList<Product>();
-		WishList wishList = new WishList("WLIST01", "WishList for user 1", products);
-		Customer customer = new Customer("USER01", "nghia", "nghia1k45@gmail.com", "0868880758", "Tay Ninh", account,
-				true, new Date(), cart, wishList);
-		session.save(account);
-//		session.save(cart);
-//		session.save(wishList);
-//		session.save(customer);
-//		session.save(role_admin);
-		session.update(account);
-//		session.update(customer);
+		WishList wishList = new WishList("Wishlist for user 01", products);
+		List<Role> roles = new ArrayList<Role>();
+		Role role = new Role("ROLE01", "ROLE_ADMIN");
+		roles.add(role);
+		session.save(role);
+		Account account = new Account("nghia1k45", "172285633", roles);
+		customer.setCart(cart);
+		customer.setWishList(wishList);
+		customer.setAccount(account);
+		session.save(customer);
 	}
 }

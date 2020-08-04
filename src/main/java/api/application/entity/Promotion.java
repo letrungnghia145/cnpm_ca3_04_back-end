@@ -3,10 +3,12 @@ package api.application.entity;
 import java.math.BigDecimal;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.MapsId;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,11 +17,18 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 
 @Table(name = "promotion")
 public class Promotion {
 	@Id
 	private String promotion_id;
 	private BigDecimal promotion;
+	@OneToOne(fetch = FetchType.LAZY)
+	@MapsId
+	private Product product;
+
+	public Promotion(BigDecimal promotion) {
+		super();
+		this.promotion = promotion;
+	}
 }

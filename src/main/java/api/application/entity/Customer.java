@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -25,19 +26,49 @@ public class Customer extends User {
 	private boolean gender;
 	@Temporal(TemporalType.DATE)
 	private Date dob;
-	@OneToOne(cascade = CascadeType.REMOVE)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "user")
 	private Cart cart;
-	@OneToOne(cascade = CascadeType.REMOVE)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "user")
 	private WishList wishList;
 	@OneToMany(mappedBy = "customer")
 	private List<Order> orders;
 
-	public Customer(String user_id, String name, String email, String phone, String address, Account account,
-			boolean gender, Date dob, Cart cart, WishList wishList) {
-		super(user_id, name, email, phone, address, account);
+	public Customer(String user_id, String name, String email, String phone, String address, boolean gender, Date dob) {
+		super(user_id, name, email, phone, address);
 		this.gender = gender;
 		this.dob = dob;
+	}
+
+	public void setAccount(Account account) {
+		if (account == null) {
+			if (this.account != null) {
+				this.account.setUser(null);
+			}
+		} else {
+			account.setUser(this);
+		}
+		this.account = account;
+	}
+
+	public void setCart(Cart cart) {
+		if (cart == null) {
+			if (this.cart != null) {
+				this.cart.setUser(null);
+			}
+		} else {
+			cart.setUser(this);
+		}
 		this.cart = cart;
+	}
+
+	public void setWishList(WishList wishList) {
+		if (wishList == null) {
+			if (this.wishList != null) {
+				this.wishList.setUser(null);
+			}
+		} else {
+			wishList.setUser(this);
+		}
 		this.wishList = wishList;
 	}
 }
