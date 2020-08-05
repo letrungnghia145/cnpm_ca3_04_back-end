@@ -17,4 +17,15 @@ public class Admin extends User {
 	public Admin(String user_id, String name, String email, String phone, String address) {
 		super(user_id, name, email, phone, address);
 	}
+
+	public void setAccount(Account account) {
+		if (account == null) {
+			if (this.account != null) {
+				this.account.setUser(null);
+			}
+		} else {
+			account.setUser(this);
+		}
+		this.account = account;
+	}
 }
