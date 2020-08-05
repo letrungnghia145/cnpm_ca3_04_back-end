@@ -21,7 +21,7 @@ public class AuthenticationControler {
 	@Autowired
 	private UserDetailsService service;
 
-	@PostMapping("/login")
+	@PostMapping("/authenticate")
 	public ResponseEntity<?> authenticate(@RequestBody JwtRequest request) {
 		String username = request.getUsername();
 		String password = request.getPassword();

@@ -36,5 +36,4 @@ public class UserDetailsImpl implements UserDetailsService {
 		}
 		return new User(account.getUsername(), account.getPassword(), authorities);
 	}
-
 }

@@ -1,6 +1,5 @@
 package api.application.repository;
 
-import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
@@ -16,11 +15,10 @@ public interface Repository<T> {
 
 	public T delete(String id) throws Exception;
 
-	@SuppressWarnings("unchecked")
 	default T create(T t, Session session) throws Exception {
 		return useTransaction(session, () -> {
-			Serializable save = session.save(t);
-			return (T) save;
+			session.save(t);
+			return t;
 		});
 	};
 
