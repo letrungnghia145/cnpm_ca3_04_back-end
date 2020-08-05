@@ -7,6 +7,9 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,6 +30,7 @@ public class ProductImages {
 	private String pic_4;
 	@OneToOne(fetch = FetchType.LAZY)
 	@MapsId
+	@JsonBackReference
 	private Product product;
 
 	public ProductImages(String mainPic, String pic_1, String pic_2, String pic_3, String pic_4) {

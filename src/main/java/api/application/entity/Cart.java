@@ -1,15 +1,21 @@
 package api.application.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.MapsId;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,8 +31,11 @@ public class Cart {
 	@Id
 	private String cart_id;
 	private String description;
-	@OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<CartItem> items;
+	@JsonManagedReference
+	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
+	@JoinTable(name = "cart_product", joinColumns = @JoinColumn(name = "cart_id"), inverseJoinColumns = @JoinColumn(name = "product_id"))
+	private List<Product> products = new ArrayList<>();
+	@JsonBackReference
 	@OneToOne(fetch = FetchType.LAZY)
 	@MapsId
 	private User user;
@@ -36,13 +45,28 @@ public class Cart {
 		this.description = description;
 	}
 
-	public void addItem(CartItem item) {
-		items.add(item);
-		item.setCart(this);
+	public void addProduct(Product product) {
+		products.add(product);
+		product.getCarts().add(this);
 	}
 
-	public void removeItem(CartItem item) {
-		items.remove(item);
-		item.setCart(null);
+	public void removeProduct(Product product) {
+		products.remove(product);
+		product.getCarts().remove(this);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!(obj instanceof Cart))
+			return false;
+		return cart_id != null && cart_id.equals(((Cart) obj).getCart_id());
+	}
+
+	@Override
+	public int hashCode() {
+		return 53;
 	}
 }

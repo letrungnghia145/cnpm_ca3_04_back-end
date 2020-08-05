@@ -1,7 +1,9 @@
 package api.application.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -11,6 +13,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,17 +33,43 @@ public class Account {
 	private String account_id;
 	private String username;
 	private String password;
-	@ManyToMany
+	@JsonManagedReference
+	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
 	@JoinTable(name = "account_role", joinColumns = @JoinColumn(name = "account_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-	private List<Role> roles;
+	private List<Role> roles = new ArrayList<>();
 	@OneToOne(fetch = FetchType.LAZY)
 	@MapsId
+	@JsonBackReference
 	private User user;
 
-	public Account(String username, String password, List<Role> roles) {
+	public Account(String username, String password) {
 		super();
 		this.username = username;
 		this.password = password;
-		this.roles = roles;
+	}
+
+	public void addRole(Role role) {
+		roles.add(role);
+		role.getAccounts().add(this);
+	}
+
+	public void removeRole(Role role) {
+		roles.remove(role);
+		role.getAccounts().remove(this);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!(obj instanceof Account))
+			return false;
+		return account_id != null && account_id.equals(((Account) obj).getAccount_id());
+	}
+
+	@Override
+	public int hashCode() {
+		return 23;
 	}
 }

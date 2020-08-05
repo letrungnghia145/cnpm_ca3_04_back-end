@@ -9,6 +9,8 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,6 +25,7 @@ public class Promotion {
 	@Id
 	private String promotion_id;
 	private BigDecimal promotion;
+	@JsonBackReference
 	@OneToOne(fetch = FetchType.LAZY)
 	@MapsId
 	private Product product;
