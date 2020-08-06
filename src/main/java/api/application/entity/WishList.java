@@ -1,5 +1,6 @@
 package api.application.entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +16,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,16 +27,16 @@ import lombok.Setter;
 @NoArgsConstructor
 
 @Table(name = "wishlist")
-public class WishList {
+public class WishList implements Serializable {
+	private static final long serialVersionUID = 1L;
 	@Id
 	private String wlist_id;
 	private String description;
-	@JsonManagedReference
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE }, fetch = FetchType.EAGER)
 	@JoinTable(name = "wlist_product", joinColumns = @JoinColumn(name = "wlist_id"), inverseJoinColumns = @JoinColumn(name = "product_id"))
 	private List<Product> products = new ArrayList<>();
 	@OneToOne(fetch = FetchType.LAZY)
-	@JsonBackReference
+	@JsonBackReference("user_wishlist_ref")
 	@MapsId
 	private User user;
 

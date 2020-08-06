@@ -1,5 +1,6 @@
 package api.application.entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -23,13 +24,14 @@ import lombok.Setter;
 @NoArgsConstructor
 
 @Table(name = "role")
-public class Role {
+public class Role implements Serializable {
+	private static final long serialVersionUID = 1L;
 	@Id
 	private String role_id;
 	@NaturalId
 	private String role_name;
 	@ManyToMany(mappedBy = "roles")
-	@JsonBackReference
+	@JsonBackReference("account_roles_ref")
 	private List<Account> accounts = new ArrayList<>();
 
 	public Role(String role_id, String role_name) {

@@ -1,5 +1,6 @@
 package api.application.entity;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 import javax.persistence.Entity;
@@ -21,11 +22,12 @@ import lombok.Setter;
 @NoArgsConstructor
 
 @Table(name = "promotion")
-public class Promotion {
+public class Promotion implements Serializable {
+	private static final long serialVersionUID = 1L;
 	@Id
 	private String promotion_id;
 	private BigDecimal promotion;
-	@JsonBackReference
+	@JsonBackReference("product_promotion_ref")
 	@OneToOne(fetch = FetchType.LAZY)
 	@MapsId
 	private Product product;

@@ -1,5 +1,6 @@
 package api.application.entity;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,6 +18,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.NaturalId;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -32,13 +35,14 @@ import lombok.Setter;
 @NoArgsConstructor
 
 @Table(name = "product")
-public class Product {
+public class Product implements Serializable {
+	private static final long serialVersionUID = 1L;
 	@Id
 	private String product_id;
 	@NaturalId
 	private String name;
 	private BigDecimal price;
-	@JsonManagedReference
+	@JsonManagedReference("product_images_ref")
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "product")
 	private ProductImages images;
 	@OneToOne
@@ -49,19 +53,20 @@ public class Product {
 	private String description;
 	private int stock;
 	private int evaluate;
-	@JsonManagedReference
+	@JsonManagedReference("product_promotion_ref")
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "product")
 	private Promotion promotion;
-	@JsonManagedReference
+	@JsonManagedReference("product_reviews_ref")
+	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Review> reviews = new ArrayList<Review>();
-	@JsonBackReference
+	@JsonBackReference("wishlist_products_ref")
 	@ManyToMany(mappedBy = "products")
 	private List<WishList> wishLists;
-	@JsonBackReference
+	@JsonBackReference("order_products_ref")
 	@ManyToMany(mappedBy = "products")
 	private List<Order> orders;
-	@JsonBackReference
+	@JsonBackReference("cart_products_ref")
 	@ManyToMany(mappedBy = "products")
 	private List<Cart> carts;
 

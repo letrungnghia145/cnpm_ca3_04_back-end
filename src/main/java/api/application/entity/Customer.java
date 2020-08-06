@@ -1,5 +1,6 @@
 package api.application.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -12,8 +13,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,18 +25,16 @@ import lombok.Setter;
 @NoArgsConstructor
 
 @Table(name = "customer")
-public class Customer extends User {
+public class Customer extends User implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private boolean gender;
 	@Temporal(TemporalType.DATE)
 	private Date dob;
-	@JsonManagedReference
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "user")
 	private Cart cart;
-	@JsonManagedReference
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "user")
 	private WishList wishList;
-	@JsonBackReference
-	@OneToMany(mappedBy = "customer")
+	@OneToMany(mappedBy = "order_id")
 	private List<Order> orders;
 
 	public Customer(String user_id, String name, String email, String phone, String address, boolean gender, Date dob) {
@@ -76,5 +74,10 @@ public class Customer extends User {
 			wishList.setUser(this);
 		}
 		this.wishList = wishList;
+	}
+
+	@JsonIgnore
+	public List<Order> getOrders() {
+		return this.orders;
 	}
 }
