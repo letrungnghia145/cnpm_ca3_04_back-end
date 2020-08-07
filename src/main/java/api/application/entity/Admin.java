@@ -15,11 +15,16 @@ import lombok.Setter;
 @NoArgsConstructor
 
 @Table(name = "admin")
-public class Admin extends User implements Serializable{
+public class Admin extends User implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	public Admin(String user_id, String name, String email, String phone, String address) {
+	public Admin(String user_id, String name, String email, String phone, String address, String username,
+			String password) {
 		super(user_id, name, email, phone, address);
+		Account account = new Account(username, password);
+		account.addRole(RoleInstance.ROLE_ADMIN);
+		account.addRole(RoleInstance.ROLE_CUSTOMER);
+		this.setAccount(account);
 	}
 
 	public void setAccount(Account account) {

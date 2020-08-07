@@ -15,6 +15,9 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import lombok.AllArgsConstructor;
@@ -44,8 +47,9 @@ public class Account implements Serializable {
 
 	public Account(String username, String password) {
 		super();
+		PasswordEncoder encoder = new BCryptPasswordEncoder();
 		this.username = username;
-		this.password = password;
+		this.password = encoder.encode(password);
 	}
 
 	public void addRole(Role role) {

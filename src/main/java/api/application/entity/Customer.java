@@ -37,10 +37,16 @@ public class Customer extends User implements Serializable {
 	@OneToMany(mappedBy = "order_id")
 	private List<Order> orders;
 
-	public Customer(String user_id, String name, String email, String phone, String address, boolean gender, Date dob) {
+	public Customer(String user_id, String name, String email, String phone, String address, boolean gender, Date dob,
+			String username, String password) {
 		super(user_id, name, email, phone, address);
 		this.gender = gender;
 		this.dob = dob;
+		this.setCart(new Cart("Cart for user " + user_id));
+		this.setWishList(new WishList("Wishlist for user " + user_id));
+		Account account = new Account(username, password);
+		account.addRole(RoleInstance.ROLE_CUSTOMER);
+		this.setAccount(account);
 	}
 
 	public void setAccount(Account account) {

@@ -71,7 +71,8 @@ public class Product implements Serializable {
 	private List<Cart> carts;
 
 	public Product(String product_id, String name, BigDecimal price, Category type, Date mfg, String exp,
-			String description, int stock, int evaluate) {
+			String description, int stock, int evaluate, BigDecimal promotion, String mainPic, String pic_1,
+			String pic_2, String pic_3, String pic_4) {
 		super();
 		this.product_id = product_id;
 		this.name = name;
@@ -82,6 +83,8 @@ public class Product implements Serializable {
 		this.description = description;
 		this.stock = stock;
 		this.evaluate = evaluate;
+		this.setPromotion(new Promotion(promotion));
+		this.setProductImages(new ProductImages(mainPic, pic_1, pic_2, pic_3, pic_4));
 	}
 
 	public void setProductImages(ProductImages images) {
