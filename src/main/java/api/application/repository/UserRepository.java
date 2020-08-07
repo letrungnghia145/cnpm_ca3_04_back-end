@@ -1,5 +1,7 @@
 package api.application.repository;
 
+import java.util.List;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,5 +35,11 @@ public class UserRepository implements Repository<User> {
 	public User delete(String id) throws Exception {
 		Session session = sessionFactory.openSession();
 		return Repository.super.delete(id, session);
+	}
+
+	@Override
+	public List<User> getAll() throws Exception {
+		Session session = sessionFactory.openSession();
+		return Repository.super.getAll(session);
 	}
 }

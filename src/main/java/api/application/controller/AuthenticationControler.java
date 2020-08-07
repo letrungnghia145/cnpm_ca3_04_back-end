@@ -25,13 +25,14 @@ public class AuthenticationControler {
 	public ResponseEntity<?> authenticate(@RequestBody JwtRequest request) {
 		String username = request.getUsername();
 		String password = request.getPassword();
+		String token = null;
 		try {
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+			final UserDetails userDetails = service.loadUserByUsername(username);
+			token = JWTUtils.generateToken(userDetails);
 		} catch (Exception e) {
 			return ResponseEntity.status(500).body(e.getMessage());
 		}
-		final UserDetails userDetails = service.loadUserByUsername(username);
-		String token = JWTUtils.generateToken(userDetails);
 		return ResponseEntity.ok(new JwtResponse(token));
 	}
 }

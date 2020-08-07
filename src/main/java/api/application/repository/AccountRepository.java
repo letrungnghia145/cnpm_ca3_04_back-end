@@ -1,5 +1,7 @@
 package api.application.repository;
 
+import java.util.List;
+
 import javax.persistence.Query;
 
 import org.hibernate.Session;
@@ -13,9 +15,9 @@ public class AccountRepository implements Repository<Account> {
 	@Autowired
 	private SessionFactory sessionFactory;
 
-	public Account findAccountByUsername(String username) {
+	public Account findAccountByUsername(String username) throws Exception {
 		Session session = sessionFactory.openSession();
-		return useTransaction(session, () -> {
+		return (Account) useTransaction(session, () -> {
 			Query query = session.createQuery("FROM Account WHERE username = :username");
 			query.setParameter("username", username);
 			return (Account) query.getSingleResult();
@@ -44,5 +46,11 @@ public class AccountRepository implements Repository<Account> {
 	public Account delete(String id) throws Exception {
 		Session session = sessionFactory.openSession();
 		return Repository.super.delete(id, session);
+	}
+
+	@Override
+	public List<Account> getAll() throws Exception {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

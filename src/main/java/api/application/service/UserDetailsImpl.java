@@ -28,7 +28,12 @@ public class UserDetailsImpl implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		AccountRepository repository = (AccountRepository) this.repository;
-		Account account = repository.findAccountByUsername(username);
+		Account account;
+		try {
+			account = repository.findAccountByUsername(username);
+		} catch (Exception e) {
+			throw new UsernameNotFoundException(e.getMessage());
+		}
 		Set<GrantedAuthority> authorities = new HashSet<>();
 		for (Role role : account.getRoles()) {
 			GrantedAuthority authority = new SimpleGrantedAuthority(role.getRole_name());

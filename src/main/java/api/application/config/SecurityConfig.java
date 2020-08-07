@@ -25,17 +25,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private UserDetailsService service;
 	@Autowired
 	private JwtFilter filter;
-	@Autowired
-	private AuthenticationEntryPoint authenticationEntryPoint;
+//	@Autowired
+//	private AuthenticationEntryPoint authenticationEntryPoint;
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable().authorizeRequests().antMatchers("/login").permitAll().antMatchers("/api/cart/**")
-				.authenticated().antMatchers("/api/order/**").authenticated().antMatchers(HttpMethod.GET, "/api/**")
-				.permitAll().antMatchers(HttpMethod.POST, "/api/products/**").hasRole("ADMIN").antMatchers("/admin/**")
-				.hasRole("ADMIN").and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-				.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint);
-		http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
+		// authenticate
+				http.csrf().disable().authorizeRequests().antMatchers("/authenticate").permitAll().
+				antMatchers(HttpMethod.GET, "/api/**").permitAll().
+				antMatchers("/user/**").hasRole("ADMIN").
+				antMatchers(HttpMethod.POST, "/login/**").authenticated().
+				antMatchers(HttpMethod.POST, "/api/**").hasRole("ADMIN").
+				antMatchers(HttpMethod.PUT, "/api/**").hasRole("ADMIN").
+				antMatchers(HttpMethod.DELETE, "/api/**").hasRole("ADMIN").
+				// session stateless
+				and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+				// add jwt filter
+				http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
 	}
 
 	@Override

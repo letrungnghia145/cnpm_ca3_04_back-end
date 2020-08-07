@@ -1,5 +1,7 @@
 package api.application.repository;
 
+import java.util.List;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,12 @@ public class ProductRepository implements Repository<Product> {
 	public Product delete(String id) throws Exception {
 		Session session = sessionFactory.openSession();
 		return Repository.super.delete(id, session);
+	}
+
+	@Override
+	public List<Product> getAll() throws Exception {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

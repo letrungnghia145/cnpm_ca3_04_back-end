@@ -2,6 +2,9 @@ package api.application.repository;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.List;
+
+import javax.persistence.Query;
 
 import org.hibernate.Session;
 
@@ -15,30 +18,36 @@ public interface Repository<T> {
 
 	public T delete(String id) throws Exception;
 
+	public List<T> getAll() throws Exception;
+
+	@SuppressWarnings("unchecked")
 	default T create(T t, Session session) throws Exception {
-		return useTransaction(session, () -> {
+		return (T) useTransaction(session, () -> {
 			session.save(t);
 			return t;
 		});
 	};
 
+	@SuppressWarnings("unchecked")
 	default T read(String id, Session session) throws Exception {
-		return useTransaction(session, () -> {
+		return (T) useTransaction(session, () -> {
 			Class<T> clazz = getGenericType();
 			T t = session.get(clazz, id);
 			return t;
 		});
 	};
 
+	@SuppressWarnings("unchecked")
 	default T update(T t, Session session) throws Exception {
-		return useTransaction(session, () -> {
+		return (T) useTransaction(session, () -> {
 			session.update(t);
 			return t;
 		});
 	};
 
+	@SuppressWarnings("unchecked")
 	default T delete(String id, Session session) throws Exception {
-		return useTransaction(session, () -> {
+		return (T) useTransaction(session, () -> {
 			Class<T> clazz = getGenericType();
 			T temp = session.get(clazz, id);
 			session.delete(temp);
@@ -46,16 +55,24 @@ public interface Repository<T> {
 		});
 	};
 
+	@SuppressWarnings("unchecked")
+	default List<T> getAll(Session session) throws Exception {
+		return (List<T>) useTransaction(session, () -> {
+			String className = getGenericType().getSimpleName();
+			Query query = session.createQuery("FROM " + className);
+			return query.getResultList();
+		});
+	};
+
 	// default method to use transaction
-	default T useTransaction(Session session, Functional<T> functional) {
-		T t = null;
+	default Object useTransaction(Session session, Functional<Object> functional) throws Exception {
+		Object t = null;
 		try {
 			session.beginTransaction();
 			t = functional.applyBatch();
 			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println(e.getMessage());
+			throw new Exception(e.getMessage());
 		} finally {
 			session.close();
 		}
