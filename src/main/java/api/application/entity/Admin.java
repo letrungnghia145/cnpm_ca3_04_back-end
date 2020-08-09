@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import api.application.model.RoleInstance;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

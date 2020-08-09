@@ -2,7 +2,8 @@ package api.application.entity;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -15,6 +16,7 @@ import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import api.application.model.RoleInstance;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -35,11 +37,23 @@ public class Customer extends User implements Serializable {
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "user")
 	private WishList wishList;
 	@OneToMany(mappedBy = "order_id")
-	private List<Order> orders;
+	private Set<Order> orders = new HashSet<>();
 
 	public Customer(String user_id, String name, String email, String phone, String address, boolean gender, Date dob,
 			String username, String password) {
 		super(user_id, name, email, phone, address);
+		this.gender = gender;
+		this.dob = dob;
+		this.setCart(new Cart("Cart for user " + user_id));
+		this.setWishList(new WishList("Wishlist for user " + user_id));
+		Account account = new Account(username, password);
+		account.addRole(RoleInstance.ROLE_CUSTOMER);
+		this.setAccount(account);
+	}
+
+	public Customer(String name, String email, String phone, String address, boolean gender, Date dob, String username,
+			String password) {
+		super(name, email, phone, address);
 		this.gender = gender;
 		this.dob = dob;
 		this.setCart(new Cart("Cart for user " + user_id));
@@ -83,7 +97,7 @@ public class Customer extends User implements Serializable {
 	}
 
 	@JsonIgnore
-	public List<Order> getOrders() {
+	public Set<Order> getOrders() {
 		return this.orders;
 	}
 }

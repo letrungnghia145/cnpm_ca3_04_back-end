@@ -1,8 +1,8 @@
 package api.application.entity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -39,7 +39,7 @@ public class Account implements Serializable {
 	private String password;
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
 	@JoinTable(name = "account_role", joinColumns = @JoinColumn(name = "account_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-	private List<Role> roles = new ArrayList<>();
+	private Set<Role> roles = new HashSet<>();
 	@OneToOne(fetch = FetchType.LAZY)
 	@MapsId
 	@JsonBackReference(value = "user_account_ref")

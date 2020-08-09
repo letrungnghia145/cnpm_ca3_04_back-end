@@ -1,8 +1,8 @@
 package api.application.entity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -34,7 +34,7 @@ public class Cart implements Serializable {
 	private String description;
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
 	@JoinTable(name = "cart_product", joinColumns = @JoinColumn(name = "cart_id"), inverseJoinColumns = @JoinColumn(name = "product_id"))
-	private List<Product> products = new ArrayList<>();
+	private Set<Product> products = new HashSet<>();
 	@JsonBackReference("user_cart_ref")
 	@OneToOne(fetch = FetchType.LAZY)
 	@MapsId

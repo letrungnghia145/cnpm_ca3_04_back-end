@@ -2,7 +2,8 @@ package api.application.entity;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -40,7 +41,7 @@ public class Order implements Serializable {
 	private Customer customer;
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
 	@JoinTable(name = "order_product", joinColumns = @JoinColumn(name = "order_id"), inverseJoinColumns = @JoinColumn(name = "product_id"))
-	private List<Product> products;
+	private Set<Product> products = new HashSet<>();
 
 	public void addProduct(Product product) {
 		products.add(product);

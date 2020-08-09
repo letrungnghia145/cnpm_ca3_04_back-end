@@ -44,4 +44,12 @@ public abstract class User implements Serializable {
 		this.phone = phone;
 		this.address = address;
 	}
+
+	public User(String name, String email, String phone, String address) {
+		super();
+		this.name = name;
+		this.email = email;
+		this.phone = phone;
+		this.address = address;
+	}
 }

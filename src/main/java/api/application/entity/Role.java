@@ -1,9 +1,9 @@
 package api.application.entity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -32,7 +32,7 @@ public class Role implements Serializable {
 	private String role_name;
 	@ManyToMany(mappedBy = "roles")
 	@JsonBackReference("account_roles_ref")
-	private List<Account> accounts = new ArrayList<>();
+	private Set<Account> accounts = new HashSet<>();
 
 	public Role(String role_id, String role_name) {
 		super();
