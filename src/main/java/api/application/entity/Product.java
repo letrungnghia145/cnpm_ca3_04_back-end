@@ -1,5 +1,6 @@
 package api.application.entity;
 
+import java.beans.ConstructorProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -76,26 +77,8 @@ public class Product implements Serializable {
 	@ManyToMany(mappedBy = "products", fetch = FetchType.EAGER)
 	private Set<Cart> carts = new HashSet<>();
 
-	public Product(String product_id, String name, BigDecimal price, int type, Date mfg, String exp, String description,
-			int stock, int evaluate, BigDecimal promotion, String mainPic, String pic_1, String pic_2, String pic_3,
-			String pic_4) {
-		super();
-		this.product_id = product_id;
-		this.name = name;
-		this.price = price;
-		this.mfg = mfg;
-		this.exp = exp;
-		this.description = description;
-		this.stock = stock;
-		this.evaluate = evaluate;
-		this.type = CategoryInstance.getCategory(type);
-		if (promotion == null) {
-			promotion = BigDecimal.valueOf(0);
-		}
-		this.setPromotion(new Promotion(promotion));
-		this.setProductImages(new ProductImages(mainPic, pic_1, pic_2, pic_3, pic_4));
-	}
-
+	@ConstructorProperties({ "name", "price", "type", "mfg", "exp", "description", "stock", "evalute", "promotion",
+			"mainPic", "pic_1", "pic_2", "pic_3", "pic_4" })
 	public Product(String name, BigDecimal price, int type, Date mfg, String exp, String description, int stock,
 			int evaluate, BigDecimal promotion, String mainPic, String pic_1, String pic_2, String pic_3,
 			String pic_4) {

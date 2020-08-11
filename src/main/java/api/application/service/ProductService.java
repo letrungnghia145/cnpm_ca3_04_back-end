@@ -1,16 +1,42 @@
 package api.application.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.List;
 
-import api.application.entity.Customer;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
-public class ProductService {
-	public static void main(String[] args) throws JsonMappingException, JsonProcessingException {
-		ObjectMapper mapper = new ObjectMapper();
-		String content = "{\"user_id\":\"USER01\",\"name\":\"Mai Dieu Thien\",\"email\":\"thien23@gmail.com\",\"phone\":\"0827342333\",\"address\":\"Tay Ninh\",\"account\":{\"account_id\":\"USER01\",\"username\":\"dieuthiencute\",\"password\":\"$2a$10$83t.XPuK6z3WVAM/H7J/GOyhRK4mOP4uIIUOrl8hlIWos7NK/V18.\",\"roles\":[{\"role_id\":\"ROLE02\",\"role_name\":\"ROLE_CUSTOMER\"}]},\"gender\":false,\"dob\":1596646800000,\"cart\":{\"cart_id\":\"USER01\",\"description\":\"CART for USER 01\",\"products\":[]},\"wishList\":{\"wlist_id\":\"USER01\",\"description\":\"WISHLIST for USER 01\",\"products\":[]}}";
-		Customer customer = mapper.readValue(content, Customer.class);
-		System.out.println(customer);
+import api.application.entity.Product;
+import api.application.repository.Repository;
+
+@org.springframework.stereotype.Service("product_service")
+public class ProductService implements Service<Product> {
+	@Autowired
+	@Qualifier("product_repository")
+	private Repository<Product> repository;
+
+	@Override
+	public Product get(String id) throws Exception {
+		return repository.read(id);
+	}
+
+	@Override
+	public Product update(String id, Product entity) throws Exception {
+		entity.setProduct_id(id);
+		return repository.update(entity);
+	}
+
+	@Override
+	public Product add(Product entity) throws Exception {
+		return repository.create(entity);
+	}
+
+	@Override
+	public Product delete(String id) throws Exception {
+		return repository.delete(id);
+	}
+
+	@Override
+	public List<Product> getAll() throws Exception {
+		return repository.getAll();
 	}
 }

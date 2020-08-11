@@ -1,13 +1,13 @@
-package api.application.controller;
+package api.application.model;
 
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-public class JwtRequest {
+public class UsernamePasswordWrapper {
 	private String username;
 	private String password;
 
-	public JwtRequest(String username, String password) {
+	public UsernamePasswordWrapper(String username, String password) {
 		super();
 		this.username = username;
 		this.password = password;

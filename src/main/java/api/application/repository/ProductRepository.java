@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import api.application.entity.Product;
 
-@org.springframework.stereotype.Repository("product")
+@org.springframework.stereotype.Repository("product_repository")
 public class ProductRepository implements Repository<Product> {
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -39,8 +39,22 @@ public class ProductRepository implements Repository<Product> {
 
 	@Override
 	public List<Product> getAll() throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		Session session = sessionFactory.openSession();
+		return Repository.super.getAll(session);
+	}
+
+	@Override
+	public long countRows() throws Exception {
+		Session session = sessionFactory.openSession();
+		return Repository.super.countRows(session);
+	}
+
+	@Override
+	public List<Product> getResultByPage(int page, int resultPerPage) throws Exception {
+		Session session = sessionFactory.openSession();
+		int end = page * resultPerPage;
+		int start = end - 10;
+		return Repository.super.getByScope(session, start, end);
 	}
 
 }

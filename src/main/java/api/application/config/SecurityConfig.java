@@ -13,7 +13,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import api.application.filters.JwtFilter;
@@ -32,7 +31,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		// authenticate
 				http.csrf().disable().authorizeRequests().antMatchers("/authenticate").permitAll().
+				antMatchers(HttpMethod.POST, "/register").permitAll().
 				antMatchers(HttpMethod.GET, "/api/**").permitAll().
+				antMatchers("/api/carts/**").permitAll().
 				antMatchers("/user/**").hasRole("ADMIN").
 				antMatchers(HttpMethod.POST, "/login/**").authenticated().
 				antMatchers(HttpMethod.POST, "/api/**").hasRole("ADMIN").

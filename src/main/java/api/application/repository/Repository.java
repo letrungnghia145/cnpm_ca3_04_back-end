@@ -20,6 +20,10 @@ public interface Repository<T> {
 
 	public List<T> getAll() throws Exception;
 
+	public long countRows() throws Exception;
+
+	public List<T> getResultByPage(int page, int resultPerPage) throws Exception;
+
 	@SuppressWarnings("unchecked")
 	default T create(T t, Session session) throws Exception {
 		return (T) useTransaction(session, () -> {
@@ -64,6 +68,25 @@ public interface Repository<T> {
 		});
 	};
 
+	default long countRows(Session session) throws Exception {
+		return (Long) useTransaction(session, () -> {
+			String className = getGenericType().getSimpleName();
+			Query query = session.createQuery("SELECT COUNT(" + className.toLowerCase() + "_id) FROM " + className);
+			return query.getSingleResult();
+		});
+	};
+
+	@SuppressWarnings("unchecked")
+	default List<T> getByScope(Session session, int start, int end) throws Exception {
+		return (List<T>) useTransaction(session, () -> {
+			String className = getGenericType().getSimpleName();
+			Query query = session.createQuery("FROM " + className);
+			query.setFirstResult(start);
+			query.setMaxResults(end);
+			return query.getResultList();
+		});
+	};
+
 	// default method to use transaction
 	default Object useTransaction(Session session, Functional<Object> functional) throws Exception {
 		Object t = null;
@@ -79,7 +102,7 @@ public interface Repository<T> {
 		return t;
 	}
 
-	// default get implement Generic
+	// default method to get implement class's Generic
 	@SuppressWarnings("unchecked")
 	default Class<T> getGenericType() {
 		Class<T> clazz = null;

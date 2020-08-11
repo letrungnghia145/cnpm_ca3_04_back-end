@@ -1,5 +1,6 @@
 package api.application.entity;
 
+import java.beans.ConstructorProperties;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
@@ -39,25 +40,14 @@ public class Customer extends User implements Serializable {
 	@OneToMany(mappedBy = "order_id")
 	private Set<Order> orders = new HashSet<>();
 
-	public Customer(String user_id, String name, String email, String phone, String address, boolean gender, Date dob,
-			String username, String password) {
-		super(user_id, name, email, phone, address);
-		this.gender = gender;
-		this.dob = dob;
-		this.setCart(new Cart("Cart for user " + user_id));
-		this.setWishList(new WishList("Wishlist for user " + user_id));
-		Account account = new Account(username, password);
-		account.addRole(RoleInstance.ROLE_CUSTOMER);
-		this.setAccount(account);
-	}
-
+	@ConstructorProperties({ "name", "email", "phone", "address", "gender", "dob", "username", "password" })
 	public Customer(String name, String email, String phone, String address, boolean gender, Date dob, String username,
 			String password) {
 		super(name, email, phone, address);
 		this.gender = gender;
 		this.dob = dob;
-		this.setCart(new Cart("Cart for user " + user_id));
-		this.setWishList(new WishList("Wishlist for user " + user_id));
+		this.setCart(new Cart("Cart for user " + this.getUser_id()));
+		this.setWishList(new WishList("Wishlist for user " + this.getUser_id()));
 		Account account = new Account(username, password);
 		account.addRole(RoleInstance.ROLE_CUSTOMER);
 		this.setAccount(account);

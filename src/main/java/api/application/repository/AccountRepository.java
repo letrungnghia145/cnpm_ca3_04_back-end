@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import api.application.entity.Account;
 
-@org.springframework.stereotype.Repository("account")
+@org.springframework.stereotype.Repository("account_repository")
 public class AccountRepository implements Repository<Account> {
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -50,6 +50,18 @@ public class AccountRepository implements Repository<Account> {
 
 	@Override
 	public List<Account> getAll() throws Exception {
+		Session session = sessionFactory.openSession();
+		return Repository.super.getAll(session);
+	}
+
+	@Override
+	public long countRows() throws Exception {
+		Session session = sessionFactory.openSession();
+		return Repository.super.countRows(session);
+	}
+
+	@Override
+	public List<Account> getResultByPage(int page, int resultPerPage) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
