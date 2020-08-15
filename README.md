@@ -6,7 +6,7 @@ Deploy to azure (Restful API)
 Link: https://spring-api.azurewebsites.net/
 
 # Technology
-Spring boot (Spring security, Spring web, Spring data JPA,...)
-Hibernate
-Project Lombok (Must build to eclipse)
+Spring boot (Spring security, Spring web, Spring data JPA,...)\
+Hibernate\
+Project Lombok (Must build to eclipse)\
 Maven
