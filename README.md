@@ -2,7 +2,7 @@
 Back-end for food sales's website
 
 # Deploy info
-Deploy to azure (Restful API)
+Deploy to azure (Restful API)\
 Link: https://spring-api.azurewebsites.net/
 
 # Technology
